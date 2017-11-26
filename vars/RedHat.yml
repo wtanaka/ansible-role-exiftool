@@ -1,2 +1,3 @@
 ---
-package_name: perl-Image-ExifTool
+package_names:
+- perl-Image-ExifTool
