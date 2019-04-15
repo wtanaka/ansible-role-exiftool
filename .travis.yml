@@ -1,27 +1,28 @@
 language: ruby
 rvm:
-- 2.2
-- 2.1
-- 2.0
 - 1.9.3
-services:
-- docker
-script:
-- >
-  wget -qO- bit.ly/ansibletest | env
-  DOCKER_IMAGES="centos:7 debian:7 ubuntu:12.04 ubuntu:16.04 fedora:20
-  fedora:24"
-  ANSIBLE_VERSIONS="1.4.4 1.8.4 2.0.0.2 2.1.0.0"
-  sh
+env:
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=centos:6
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=centos:7
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=debian:8
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=debian:9
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=fedora:22
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=fedora:23
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=fedora:24
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=fedora:25
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=fedora:26
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=fedora:27
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=ubuntu:12.04
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=ubuntu:14.04
+- ANSIBLE_VERSIONS=1.4 DOCKER_IMAGES=ubuntu:16.04
+services: docker
+script: wget -O- bit.ly/ansibletest | sh -x
 after_failure:
+- cat role-tester-ansible-master/.kitchen.yml
+- cat role-tester-ansible-master/.kitchen.local.yml
 - cat role-tester-ansible-master/.kitchen/logs/*.log | grep -v '^I, '
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
-  slack:
-    on_success: change
-    on_failure: change
-    rooms:
-      - secure: YnWwpbm5TcKqYdJa8vzj6lk/Q26h9Rzi1QXRhMEM1W+zF0IFQc38YjAGPFOivNkpjz5jZYMKsmH0DQHBvYXzSTKcaaSLA305YO84jPr0VHOq1af0OGnNhEp+h+ZUYpjCrrnW9tU7m7nNcKDiRetX8bQFTIsCV6/01ytC0K1kvPmb0KhG0vjXL5AAN+RuZ7vLGo0YEsaOn62QGy8/GK+1wmKrRUe+uoazHreHbytocyLl6q1y/vbbiiki9RVx+oJoO9Kyu0r1hc8qel+WnoP7+1pKYwOjz780WCjAV1qx/BAGu0yBuymVpbZj0/YRqZnHaCm4sabPWClY3VjZPeccSGQx6Xc45FKEjPzPbcXtyGesEMP0ZNJg5+72OGxyBEqHH4N/q9yfRdhJcMDakpFR0ljr9YL/mCBmntmgn1tExAMV9/wfYCKEJI4DBwXLNIrGk6nJ9uX4wDfBwakcRe4fM3HB/Y8TePKL5R0kGPvthQ6Ofge1mIe4GVnJYDPfNoe2yvKNPbOr3EVy4GfU9rSVAnhb6jJjlnKMkGPMAwBj7EHUS4Jg7M8Ay/UcHqNolILDoJbUpB2E7uA4f9Dye4McH1Jw9Bt+RN4ZvEF106cLlGuPGs1vziybTrDiurcRMt6h7IYZFy3FCMmjQkgjKNOnthIn2/Uf79cWDQaG8q4FOf8=
   email:
     recipients:
-      secure: w6n/4WGqolzfc2X2lUjQOXEqXvE+BFG1vWQLOZCwgjONgMQXZ+o1JI3jMtGWr5b/3nmhFVEI31fQkHhhjBs4/dO6lZue7s7Hcfe4EpAIW4PzlR41DLCvI1UfzLRSPPhNjH1yA2z6YNkDEI+XZX8lo2d6VmraJFjeuuyF3vvUUfX7WSrPk/88K7psoMZxzKBS6y9S29PO6ofoKyaxlHlr4K+aXGbiBi+ddaqBhmi8EUXkgd8Hga3zyTOZnozRwXcDz32QwLuPxaSsMK1Ymh4CDfQFlFfO+hWzNkVtF6AjTpm3njqFBkiEhQKIUtes1UTCikZCnfnmYDnOcglevVqF949VcG7ha/bEZjiC9dtpa78+Pr48HeHzRTMc0WbUhUfN5f16QT3/Uni/RlSLArmbs/xODbXErbfYl+wEosg8m+Y3TzwJv+nH8xUO9ZVwuXmJHFjPw4xpZRr7t+qQhBoyLafUFIWmsCFccMxdPzCf9WjoaJcrwd066K4ccu04nnN4j2Ae5BGOi3MwxIUoOEqli0tj0OXKWZFgvnWZxjnTtrgK4RF+iABT680lIxl54TYva7cuXhoN+PysZFqFTeumsr7ApL2SeChb2JyPTU1Sq5Ti9sVMG3z8vnpD75ciegBGs5DU+IZCEs6PuyF6F3MOYM/BqWVAysolsJVN2HY2ZqU=
+      secure: Awu20yixRuCggXBxnIQQntP4S3bJOpU0Jyf9b2p2F/Uqfp2TMxWybURlE9QSL8FsRojHcqXbtKMNO5dILgwjWNZAbOwCJAlxImZQl4fQUzh/Uiutr9x1ZzaiDlZO3a3bF5ekgJVr8FMi9PmJ4cWfubXEOGKOgcPkxYvMRCpj1/kmWoWzpkEn0hLbnDrRT63I4jBHJg4nW1QlQOVbw0IUHRN2IwF+sIVV0mNEI7be3jdiwYF+6KiSnbrhlt4NCFTHMNGgyr4Wg+JNIl67aG5UPb/aewukVDhL3eBQzfZIh2oe2O4abb5aRkdF0QgcVl2d5RyAGQ1vYtlzwZPTR8sDdmPjzPGIzGEoM4nqxw5xi20l7Qf/aStzBI33t6LGWEnSKbpYFcbw+euXHROevh9p4ez/FNo/+J8z4ThNZYlkJMLTnO6BHgEFQxcl8rs+jNXtD1s1riG7zB5nYXVJp4e880ooX9NuhXIP8bY9GJwtGsyb+Pkw4cUWKhZzqBT5nUGl4uU5RDNTHymd0P9Cf18Ih5JvmBL0t99Eh1flpkb2/15R+zjyG8f/2Kt+nwWbN63HoBgfLouKudhmkLUsbx/jNv4/ixzNKcE6IFcZpIhOFp11gg4TSRSSR0QW3We8MLz/RXMVsfnkzQ1BnQ32O1nHxwduTQW05Hfjs5mpZIyFOYY=
